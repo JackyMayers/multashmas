@@ -130,7 +130,7 @@
             const motivo = incidente === "Interno" ? "Levou para o hospital" : "Recusou ir ao hospital";
             const dataFormatada = data.split('-').reverse().join('/');
 
-            registros.push(`${advertenciaCount} Advertência: ${dataFormatada} às ${hora} - ${nomeMedico} - (${plantao}) - (${motivo})`);
+            registros.push(`${advertenciaCount} Advertência: ${dataFormatada} às ${hora} - ${nomeMedico} - Médicos em plantão (${plantao}) - (${motivo})`);
             atualizarResultado(nomeInfrator, idPassaporte);
         }
 
