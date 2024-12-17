@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Multas HP</title>
@@ -15,6 +14,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column; /* Para garantir que o conteúdo seja organizado verticalmente */
         }
         .container {
             background-color: #fff;
@@ -68,6 +68,11 @@
     </style>
 </head>
 <body>
+    <!-- Link para Calcular Tempo de Trabalho -->
+    <a href="https://jackymayers.github.io/CDPHMAS/">
+        <font color="darkorange">Calcular tempo de trabalho</font>
+    </a>
+
     <div class="container">
         <h2>Registro de Multas</h2>
         <label for="nomeInfrator">Nome do Infrator:</label>
@@ -101,6 +106,13 @@
         <h3>Resultado:</h3>
         <pre id="resultado"></pre>
     </div>
+
+    <!-- Logo e Direitos Autorais -->
+    <center>
+        <img src="https://i.postimg.cc/nr7qgTWj/Logo-VRT-Andrea-Silva11.png" alt="">
+    </center>
+    <br/>
+    <p style="text-align: center; font-weight: bold;">Direitos Reservados © 2024 <a href="https://jackymayers.github.io/" target="_blank" style="font-weight: bold;">Jacky Mayers</a>.</p>
 
     <script>
         let registros = [];
@@ -153,6 +165,5 @@
             document.getElementById('resultado').innerText = resultado;
         }
     </script>
-    
 </body>
 </html>
