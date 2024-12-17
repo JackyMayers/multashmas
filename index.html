@@ -21,8 +21,6 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 400px;
-            overflow-y: auto;
-            max-height: 90vh;
         }
         h2 {
             text-align: center;
@@ -61,9 +59,6 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             font-size: 14px;
-            overflow-y: auto;
-            max-height: 200px;
-            border: 1px solid #ccc;
         }
     </style>
 </head>
@@ -117,7 +112,8 @@
 
             const motivo = incidente === "Interno" ? "Levou para o hospital" : "Recusou ir ao hospital";
             const dataFormatada = data.split('-').reverse().join('/');
-            registros.push(`Orientado: ${dataFormatada} às ${hora} - ${nomeMedico} - (${plantao}) - (${motivo})`);
+
+            registros.push(`Orientado: ${dataFormatada} às ${hora} - ${nomeMedico} - Médicos em plantão (${plantao}) - (${motivo})`);
             atualizarResultado(nomeInfrator, idPassaporte);
         }
 
@@ -134,7 +130,7 @@
             const motivo = incidente === "Interno" ? "Levou para o hospital" : "Recusou ir ao hospital";
             const dataFormatada = data.split('-').reverse().join('/');
 
-            registros.push(`${advertenciaCount} Advertência: ${dataFormatada} às ${hora} - ${nomeMedico} - (${plantao}) - (${motivo})`);
+            registros.push(`${advertenciaCount} Advertência: ${dataFormatada} às ${hora} - ${nomeMedico} - Médicos em plantão (${plantao}) - (${motivo})`);
             atualizarResultado(nomeInfrator, idPassaporte);
         }
 
@@ -147,13 +143,9 @@
 
         function atualizarResultado(nomeInfrator, idPassaporte) {
             const resultado = "```\n" +
-                `Nome: ${nomeInfrator}\nPassaporte: ${idPassaporte}\n${registros.join('\n')}\nMeicos emplantao` +
+                `Nome: ${nomeInfrator}\nPassaporte: ${idPassaporte}\n${registros.join('\n')}` +
                 "\n```";
-            const resultadoElemento = document.getElementById('resultado');
-            resultadoElemento.innerText = resultado;
-
-            // Rolar para o início do conteúdo
-            resultadoElemento.scrollTop = 0;
+            document.getElementById('resultado').innerText = resultado;
         }
     </script>
 </body>
