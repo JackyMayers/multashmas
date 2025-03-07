@@ -8,27 +8,28 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #2c2f3a; /* Mais escuro */
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            flex-direction: column; /* Para garantir que o conteúdo seja organizado verticalmente */
+            flex-direction: column;
+            color: #fff; /* Cor do texto mais clara */
         }
         .container {
-            background-color: #fff;
+            background-color: #3a3f4d; /* Mais escuro */
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             width: 400px;
-            max-height: 80vh; /* Ajusta o tamanho máximo da janela */
-            overflow-y: auto; /* Permite rolar o conteúdo */
+            max-height: 80vh;
+            overflow-y: auto;
         }
         h2 {
             text-align: center;
-            color: #333;
+            color: #ff8c00; /* Cor de destaque */
         }
         label {
             display: block;
@@ -39,9 +40,11 @@
             width: 100%;
             padding: 8px;
             margin: 5px 0 15px;
-            border: 1px solid #ccc;
+            border: 1px solid #444;
             border-radius: 4px;
             box-sizing: border-box;
+            background-color: #2e343f; /* Mais escuro */
+            color: #fff; /* Texto branco */
         }
         button {
             background-color: #007BFF;
@@ -57,30 +60,37 @@
             background-color: #0056b3;
         }
         pre {
-            background-color: #eee;
+            background-color: #333;
             padding: 10px;
             border-radius: 4px;
             white-space: pre-wrap;
             word-wrap: break-word;
             font-size: 14px;
-            max-height: 200px; /* Limita a altura do campo de resultado */
-            overflow-y: auto; /* Adiciona rolagem quando necessário */
+            max-height: 200px;
+            overflow-y: auto;
+            color: #eee; /* Texto mais claro para o resultado */
+        }
+        /* Estilo para o centro da imagem e o texto de direitos reservados */
+        .footer {
+            text-align: center;
+            color: #bbb;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        .footer a {
+            color: #ff8c00;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <!-- Link para Calcular Tempo de Trabalho -->
-    <a href="https://jackymayers.github.io/CDPHMAS/">
-        <font color="darkorange">Calcular tempo de trabalho</font>
-    </a>
-
     <div class="container">
+        <center>
+            <img src="https://i.postimg.cc/nr7qgTWj/Logo-VRT-Andrea-Silva11.png" alt="">
+        </center>
         <h2>Registro de Multas</h2>
-        <label for="nomeInfrator">Nome do Infrator:</label>
-        <input type="text" id="nomeInfrator" placeholder="Ex: Nome do Infrator">
-
-        <label for="idPassaporte">Passaporte (ID):</label>
-        <input type="text" id="idPassaporte" placeholder="Ex: 0000">
+        <label for="dadosInfrator">Dados do Infrator:</label>
+        <input type="text" id="dadosInfrator" placeholder="Ex: ID Nome Sobrenome (multa)">
 
         <label for="incidente">Tipo de Incidente:</label>
         <select id="incidente">
@@ -88,81 +98,38 @@
             <option value="Externo">Externo</option>
         </select>
 
-        <label for="data">Data:</label>
-        <input type="date" id="data">
-
-        <label for="hora">Hora:</label>
-        <input type="time" id="hora">
-
-        <label for="nomeMedico">Nome do Médico:</label>
-        <input type="text" id="nomeMedico" placeholder="Ex: Dr. Fulano">
-
-        <label for="plantao">Médicos em Plantão:</label>
-        <input type="text" id="plantao" placeholder="Ex: Plantão 1">
-
-        <button onclick="gerarOrientacao()">Adicionar Orientado</button>
-        <button onclick="adicionarAdvertencia()">Adicionar Advertência</button>
-        <button onclick="gerarMulta()">Aplicar Multa</button>
+        <button onclick="processarDados()">Gerar Registro</button>
 
         <h3>Resultado:</h3>
         <pre id="resultado"></pre>
     </div>
 
-    <!-- Logo e Direitos Autorais -->
-    <center>
-        <img src="https://i.postimg.cc/nr7qgTWj/Logo-VRT-Andrea-Silva11.png" alt="">
-    </center>
-    <br/>
-    <p style="text-align: center; font-weight: bold;">Direitos Reservados © 2024 <a href="https://jackymayers.github.io/" target="_blank" style="font-weight: bold;">Jacky Mayers</a>.</p>
+    <div class="footer">
+        <p style="font-weight: bold;">Direitos Reservados © 2024 <a href="https://jackymayers.github.io/" target="_blank">Jacky Mayers</a>.</p>
+    </div>
 
     <script>
-        let registros = [];
-        let advertenciaCount = 0;
-
-        function gerarOrientacao() {
-            const nomeInfrator = document.getElementById('nomeInfrator').value;
-            const idPassaporte = document.getElementById('idPassaporte').value;
-            const data = document.getElementById('data').value;
-            const hora = document.getElementById('hora').value;
-            const nomeMedico = document.getElementById('nomeMedico').value;
-            const plantao = document.getElementById('plantao').value;
+        function processarDados() {
+            const dadosInfrator = document.getElementById('dadosInfrator').value;
             const incidente = document.getElementById('incidente').value;
-
+            
+            // Regex que aceita com ou sem espaço entre o nome e o sobrenome
+            const regex = /(\d+) - (.+?)\s?\((multa)\)/;
+            const match = dadosInfrator.match(regex);
+            
+            if (!match) {
+                document.getElementById('resultado').innerText = "Formato inválido. Use: ID Nome Sobrenome (multa)";
+                return;
+            }
+            
+            const idPassaporte = match[1];
+            const nomeInfrator = match[2];
             const motivo = incidente === "Interno" ? "Levou para o hospital" : "Recusou ir ao hospital";
-            const dataFormatada = data.split('-').reverse().join('/');
-
-            registros.push(`Orientado: ${dataFormatada} às ${hora} - ${nomeMedico} - Médicos em plantão (${plantao}) - (${motivo})`);
-            atualizarResultado(nomeInfrator, idPassaporte);
-        }
-
-        function adicionarAdvertencia() {
-            advertenciaCount++;
-            const nomeInfrator = document.getElementById('nomeInfrator').value;
-            const idPassaporte = document.getElementById('idPassaporte').value;
-            const data = document.getElementById('data').value;
-            const hora = document.getElementById('hora').value;
-            const nomeMedico = document.getElementById('nomeMedico').value;
-            const plantao = document.getElementById('plantao').value;
-            const incidente = document.getElementById('incidente').value;
-
-            const motivo = incidente === "Interno" ? "Levou para o hospital" : "Recusou ir ao hospital";
-            const dataFormatada = data.split('-').reverse().join('/');
-
-            registros.push(`${advertenciaCount} Advertência: ${dataFormatada} às ${hora} - ${nomeMedico} - Médicos em plantão (${plantao}) - (${motivo})`);
-            atualizarResultado(nomeInfrator, idPassaporte);
-        }
-
-        function gerarMulta() {
-            const nomeInfrator = document.getElementById('nomeInfrator').value;
-            const idPassaporte = document.getElementById('idPassaporte').value;
-            registros.push(`Aplicacao de multa no valor de R$: 50 MIL.`);
-            atualizarResultado(nomeInfrator, idPassaporte);
-        }
-
-        function atualizarResultado(nomeInfrator, idPassaporte) {
-            const resultado = "```\n" +
-                `Nome: ${nomeInfrator}\nPassaporte: ${idPassaporte}\n${registros.join('\n')}` +
-                "\n```";
+            const multa = "Aplicação de multa no valor de R$: 50 MIL.";
+            
+            // Exibir o resultado com os ``` que você pediu
+            const resultado = `\`\`\`Passaporte: ${idPassaporte}\nNome: ${nomeInfrator}\nMotivo: ${motivo}\nStatus: ${multa}\`\`\``;
+            
             document.getElementById('resultado').innerText = resultado;
         }
     </script>
